@@ -1,13 +1,19 @@
-import { StyleSheet, Text, TextInput ,Button, View } from 'react-native';
+import { StyleSheet,  View } from 'react-native';
+//import { Logo }from './Logo.jsx'
 
-
-export default function Contacts({navigation, route}){
-    const {name, email} = route.params;
+export default function Contacts(){
     return(
-        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <Text style={{marginBottom:10}}>Contactenos</Text>
-            <Text style={{marginBottom:10}}>Your fullname is: {name} with email: {email}</Text>
+        <View style={styles.container}>
+          
         </View>
     )
 
 }
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#AF7AC5',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }
+  });

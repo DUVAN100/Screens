@@ -1,6 +1,7 @@
 import { StyleSheet, Text,  View } from 'react-native';
-import {useState} from 'react';
+import React, { useState } from 'react';
 import Contacts from './screens/Contacts'
+import {Cars} from './screens/Cars'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,10 +14,11 @@ import { RegisterUser } from './screens/RegisterUser';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-let users = [
-  {email:"duvan", name:"Duvan" ,password:"1", role:2},
-  {email:"duvan2", name:"Duvan2" ,password:"2", role:1}
-]
+let usuarios = [
+   {email:"duvan", name:"Duvan" ,password:"1"},
+   {email:"duvan2", name:"Duvan2" ,password:"2"}
+ ]
+
 
 export default function App() {
   return (
@@ -27,7 +29,39 @@ export default function App() {
     </NavigationContainer>
   );  
 }
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown:false,
+        tabBarActiveTintColor:'red',
+        tabBarInactiveTintColor:'gray',
+        tabBarActiveBackgroundColor:'aqua',
+        tabBarInactiveBackgroundColor:'#6667',
+        
+      }} 
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{
+        tabBarStyle:{display:'none'},
+        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'logout'}  color={ 'red' }/>
+      }} />
+      <Tab.Screen name="User" component={RegisterUser} initialParams={[usuarios]} options={{
+        tabBarStyle:{display:'none'},
+        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'person'}  color={ 'red' }/>
+      }} />
+      <Tab.Screen name="Cars" component={Cars} options={{
+        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'apps'}  color={ 'red' }/>
+      }} />
+      <Tab.Screen name="Contacts" component={Contacts} options={{
+        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'phone'}  color={ 'red' }/>
+      }} />
+    </Tab.Navigator>
+  );
+}
+
 function HomeScreen({navigation}){
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [findError, setFindError] = useState('');
@@ -35,7 +69,7 @@ function HomeScreen({navigation}){
     <View style={styles.container}>
       <Text style={{marginBottom:20}}>Log in</Text>
       <TextInput
-          style={{margin:20}}
+          style={{margin:20, borderRadius:10}}
           label="Email"
           mode="outlined"
           left={<TextInput.Icon icon="account" />}
@@ -43,7 +77,7 @@ function HomeScreen({navigation}){
           value={email}
       />
       <TextInput
-          style={{margin:20}}
+          style={{margin:20, borderRadius:10}}
           label="Password"
           mode="outlined"
           right={<TextInput.Icon icon="eye" />}
@@ -52,7 +86,7 @@ function HomeScreen({navigation}){
           secureTextEntry
       />
       <Button icon="login" mode="contained" onPress={() =>{
-        let findUser = users.find(usr => usr.email == email && usr.password == password)
+        let findUser = usuarios.find(usr => usr.email == email && usr.password == password)
         if(findUser != undefined){
           setFindError('')
           const {name, email} = findUser
@@ -68,47 +102,11 @@ function HomeScreen({navigation}){
 
   );
 }
-function MyTabs() {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown:false,
-        tabBarActiveTintColor:'red',
-        tabBarInactiveTintColor:'gray',
-        tabBarActiveBackgroundColor:'aqua',
-        tabBarInactiveBackgroundColor:'#6667',
-        
-      }} 
-    >
-      <Tab.Screen name="Home" component={HomeScreen} options={{
-        tabBarStyle:{display:'none'},
-        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'home'}  color={ 'red' }/>
-      }} />
-      <Tab.Screen name="User" component={RegisterUser} options={{
-        tabBarStyle:{display:'none'},
-        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'Arrow Back'}  color={ 'red' }/>
-      }} />
-      <Tab.Screen name="Products" component={ProductScreen} options={{
-        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'apps'}  color={ 'red' }/>
-      }} />
-      <Tab.Screen name="Contacts" component={Contacts} options={{
-        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'phone'}  color={ 'red' }/>
-      }} />
-    </Tab.Navigator>
-  );
-}
-function ProductScreen({navigation}){
-  return(
-    <View style={styles.container}>
-      <Text>Products screen</Text>
-    </View>
 
-  );
-}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#6C3483',
     alignItems: 'center',
     justifyContent: 'center',
   },
