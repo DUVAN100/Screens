@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text,  View, TouchableOpacity } from 'react-native';
+import { StyleSheet,  View } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, Button, Icon, Checkbox  } from 'react-native-paper';
+import { TextInput, Button, Text, Icon, Checkbox  } from 'react-native-paper';
 
 export const Cars = ({navigation,route}) => {
     const [cars, setCars] = useState([])
@@ -9,25 +9,19 @@ export const Cars = ({navigation,route}) => {
         defaultValues: {
           plateNumber: '',
           brand: '',
-          state: ''  
         }
       });
     
     const onsubmit=(data)=>{
-        console.log("data: ",data)
         let newCar ={
-            plateNumber:plateNumber,
-            brand:brand,
-            state:state
+            plateNumber:data.plateNumber,
+            brand:data.brand,
+            isChecked:data.isChecked
         }
+
         setCars([...cars, newCar]);
-        console.log("Cars", cars)
         reset()
     }
-    const handlePress = () => {
-        navigation.navigate('Contacts');
-    };
-
     return (
         <View style={styles.container}> 
         <Controller 
@@ -40,17 +34,17 @@ export const Cars = ({navigation,route}) => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={{margin:20, borderRadius:10}}
+                  style={{margin:20, borderRadius:20}}
                   placeholder="(format AAA123)"
-                  label="plateNumber user"
+                  label="plateNumber"
                   mode='outlined'
-                  left={<TextInput.Icon icon="clipboard-account"/>}
+                  left={<TextInput.Icon icon="counter"/>}
                       onBlur={onBlur}
                       onChangeText={onChange}
                       value={value}
                   />
                 )}
-                plateNumber="plateNumber"
+                name="plateNumber"
             />
             {errors.plateNumber?.type == 'required' && <Text style={{color:'red'}}>plateNumber is required.</Text>}
             {errors.plateNumber?.type == 'maxLength' && <Text style={{color:'red'}}>plateNumber 30 mas characters.</Text>}
@@ -65,40 +59,55 @@ export const Cars = ({navigation,route}) => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                    style={{margin:20, borderRadius:10}}
-                    label="E-mail"
+                    style={{margin:20, borderRadius:20}}
+                    label="Brand"
                     placeholder=' "Ford", "Volkswagen", "Land Rover", "Alfa Romeo", "Mercedes-Benz"'
                     mode='outlined'
-                    left={<TextInput.Icon icon="brand-box"/>}
+                    left={<TextInput.Icon icon="format-letter-spacing"/>}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
                 />
               )}
-              plateNumber="brand"
+              name="brand"
           />
           {errors.brand?.type == 'required' && <Text style={{color:'red'}}>Brand is required.</Text>}
           {errors.brand?.type == 'maxLength' && <Text style={{color:'red'}}>Brand 30 mas characters.</Text>}
           {errors.brand?.type == 'minLength' && <Text style={{color:'red'}}>Brand 3 mas characters.</Text>}
           {errors.brand?.type == 'pattern' && <Text style={{color:'red'}}>Brand is invalid.</Text>}
-
+        
         <Controller
             control={control}
             name="isChecked"
             defaultValue={false}
             render={({ field: { onChange, value } }) => (
-                <Checkbox
-                    value={value}
-                    onValueChange={(newValue) => onChange(newValue)}
-                />
+                <View style={{ flexDirection: 'row', alignItems: 'center', margin:10 }}>
+                    <Checkbox
+                        status={value ? 'checked' : 'unchecked'}
+                        onPress={() => onChange(!value)}
+                    />
+                    <Text>sold</Text>
+                </View>
             )}
         />
-        <Button icon="login" mode="contained" onPress={handleSubmit(onsubmit)}>Save car</Button>
-        <TouchableOpacity onPress={handlePress}>
-          <Text>Back</Text>
-        </TouchableOpacity>
+        
+
+
+        <Button style={{marginBottom:20}} icon="login" mode="contained" onPress={handleSubmit(onsubmit)}>Save car</Button>
+        <Text>--------------------------------------------------------------------------------------------------------</Text>
+        <Text style={{marginBottom:20, fontSize:30, fontFamily:'Roboto' }}>Registrad car:</Text>
+        {cars.map((car, index) => (
+          <View key={index}>
+            {console.log("CAR  ",car)}
+            <Text style={{marginBottom:20, fontSize:20, fontFamily:'Roboto' }}>PlateNumber:  {car.plateNumber}</Text>
+            <Text style={{marginBottom:20, fontSize:20, fontFamily:'Roboto' }}>Brand:        {car.brand}</Text>
+            <Text style={{marginBottom:20, fontSize:20, fontFamily:'Roboto' }}>Sold:         {car.isChecked ? 'Sold' : 'Unsold'}</Text>
+            <Text>----------------------------------------------</Text>
+          </View>
+        ))}
+
+
       </View>
-    
   )
 }
 const styles = StyleSheet.create({

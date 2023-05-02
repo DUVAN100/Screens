@@ -51,7 +51,7 @@ function MyTabs() {
         tabBarIcon:()=> <MaterialIcons size={ 20 } name={'person'}  color={ 'red' }/>
       }} />
       <Tab.Screen name="Cars" component={Cars} options={{
-        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'apps'}  color={ 'red' }/>
+        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'train'}  color={ 'red' }/>
       }} />
       <Tab.Screen name="Contacts" component={Contacts} options={{
         tabBarIcon:()=> <MaterialIcons size={ 20 } name={'phone'}  color={ 'red' }/>
@@ -67,9 +67,10 @@ function HomeScreen({navigation}){
   const [findError, setFindError] = useState('');
   return(
     <View style={styles.container}>
-      <Text style={{marginBottom:20}}>Log in</Text>
+      <Text style={{marginBottom:20, fontSize:30, fontFamily:'Roboto' }}>Log in</Text>
+
       <TextInput
-          style={{margin:20, borderRadius:10}}
+          style={{margin:20, borderRadius:20}}
           label="Email"
           mode="outlined"
           left={<TextInput.Icon icon="account" />}
@@ -77,7 +78,7 @@ function HomeScreen({navigation}){
           value={email}
       />
       <TextInput
-          style={{margin:20, borderRadius:10}}
+          style={{margin:20, borderRadius:20}}
           label="Password"
           mode="outlined"
           right={<TextInput.Icon icon="eye" />}

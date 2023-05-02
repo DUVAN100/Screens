@@ -1,10 +1,10 @@
 import { StyleSheet,  View } from 'react-native';
-//import { Logo }from './Logo.jsx'
+import Images from './Images';
 
 export default function Contacts(){
     return(
         <View style={styles.container}>
-          
+          <Images/>
         </View>
     )
 
