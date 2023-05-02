@@ -1,7 +1,9 @@
 import { StyleSheet, Text,  View } from 'react-native';
 import React, { useState } from 'react';
-import Contacts from './screens/Contacts'
+import  Contacts  from './screens/Contacts'
 import {Cars} from './screens/Cars'
+import { Rent } from './screens/Rent';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -14,10 +16,16 @@ import { RegisterUser } from './screens/RegisterUser';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-let usuarios = [
-   {email:"duvan", name:"Duvan" ,password:"1"},
-   {email:"duvan2", name:"Duvan2" ,password:"2"}
+var usuarios = [
+   {email:"duvan", name:"Duvan", fullname:"Duvan Yesid Vivas Bermudez",password:"1"},
+   {email:"duvanvivas100@gmail.com", name:"Duvan100", fullname:"Duvan Yesid Vivas Bermudez" ,password:"2"}
  ]
+var carros = [
+  {plateNumber:'AAA123', brand:'Ford', isChecked:true}
+]
+var rentas = [
+  {rentNumber: '',userName: '',plateNUmber:'',rentDate:''}
+]
 
 
 export default function App() {
@@ -50,8 +58,11 @@ function MyTabs() {
         tabBarStyle:{display:'none'},
         tabBarIcon:()=> <MaterialIcons size={ 20 } name={'person'}  color={ 'red' }/>
       }} />
-      <Tab.Screen name="Cars" component={Cars} options={{
+      <Tab.Screen name="Cars" component={Cars} initialParams={[carros]} options={{
         tabBarIcon:()=> <MaterialIcons size={ 20 } name={'train'}  color={ 'red' }/>
+      }} />
+      <Tab.Screen name="Rent" component={Rent} initialParams={[usuarios,rentas, carros]} options={{
+        tabBarIcon:()=> <MaterialIcons size={ 20 } name={'rule'}  color={ 'red' }/>
       }} />
       <Tab.Screen name="Contacts" component={Contacts} options={{
         tabBarIcon:()=> <MaterialIcons size={ 20 } name={'phone'}  color={ 'red' }/>
@@ -90,10 +101,9 @@ function HomeScreen({navigation}){
         let findUser = usuarios.find(usr => usr.email == email && usr.password == password)
         if(findUser != undefined){
           setFindError('')
-          const {name, email} = findUser
           setEmail('')
           setPassword('')
-          navigation.navigate('Contacts',{name:name, email:email} )
+          navigation.navigate('Contacts')
         }else{
           setFindError("Email y/o password invalid")
         }

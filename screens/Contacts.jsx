@@ -12,7 +12,7 @@ export default function Contacts(){
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#AF7AC5',
+      backgroundColor: '#212F3D',
       alignItems: 'center',
       justifyContent: 'center',
     }

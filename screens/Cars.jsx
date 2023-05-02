@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { TextInput, Button, Text, Icon, Checkbox  } from 'react-native-paper';
 
 export const Cars = ({navigation,route}) => {
-    const [cars, setCars] = useState([])
+    let arrayCars = route.params[0];
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
           plateNumber: '',
@@ -12,15 +12,9 @@ export const Cars = ({navigation,route}) => {
         }
       });
     
-    const onsubmit=(data)=>{
-        let newCar ={
-            plateNumber:data.plateNumber,
-            brand:data.brand,
-            isChecked:data.isChecked
-        }
-
-        setCars([...cars, newCar]);
-        reset()
+      const onsubmit=(data)=>{
+        arrayCars.push(data);
+        reset();   
     }
     return (
         <View style={styles.container}> 
@@ -96,7 +90,7 @@ export const Cars = ({navigation,route}) => {
         <Button style={{marginBottom:20}} icon="login" mode="contained" onPress={handleSubmit(onsubmit)}>Save car</Button>
         <Text>--------------------------------------------------------------------------------------------------------</Text>
         <Text style={{marginBottom:20, fontSize:30, fontFamily:'Roboto' }}>Registrad car:</Text>
-        {cars.map((car, index) => (
+        {arrayCars.map((car, index) => (
           <View key={index}>
             {console.log("CAR  ",car)}
             <Text style={{marginBottom:20, fontSize:20, fontFamily:'Roboto' }}>PlateNumber:  {car.plateNumber}</Text>

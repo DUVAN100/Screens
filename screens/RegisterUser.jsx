@@ -1,26 +1,45 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text,  View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text,  View, Alert, Modal, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { useDeferredValue } from 'react'
 import { TextInput, Button, Icon } from 'react-native-paper';
 
 
 
 export const RegisterUser = ({navigation,route}) => {
-    let arrayobject = route.params;
+    let arrayobject = route.params[0];
+    console.log("arrayobject ", arrayobject);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [message, setMessage] = useState('');
     const { control, handleSubmit,reset, formState: { errors } } = useForm({
         defaultValues: {
-          nameUser: '',
           email: '',
+          nameUser: '',
+          fullName:'',
           password: ''  
         }
       });
     const handlePress = () => {
       navigation.navigate('Contacts');
     };
+    const showModal = () => {
+      setModalVisible(true);
+    }
+    const closeModal = () => {
+      setModalVisible(false);
+    }
     const onsubmit=(data)=>{
-        arrayobject[0].push(data);
-        reset();   
+      console.log("DATA:  ", data);
+        let findUser = arrayobject.find(usr => usr.name === data.nameUser || usr.email === data.email )
+        if (findUser === undefined){
+          setMessage('User registred');
+          showModal();
+          arrayobject.push(data);
+          reset(); 
+        }else{
+          setMessage('User exist, try again');
+          showModal();
+          reset(); 
+        }
     }
 
     return (
@@ -36,7 +55,7 @@ export const RegisterUser = ({navigation,route}) => {
               render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     style={{margin:20, borderRadius:10}}
-                    placeholder="Write your name"
+                    placeholder="Write your user name"
                     label="name user"
                     mode='outlined'
                     left={<TextInput.Icon icon="clipboard-account"/>}
@@ -47,10 +66,36 @@ export const RegisterUser = ({navigation,route}) => {
                   )}
                   name="nameUser"
               />
-              {errors.name?.type == 'required' && <Text style={{color:'red'}}>Name is required.</Text>}
-              {errors.name?.type == 'maxLength' && <Text style={{color:'red'}}>Name 30 mas characters.</Text>}
-              {errors.name?.type == 'minLength' && <Text style={{color:'red'}}>Name 3 mas characters.</Text>}
-              {errors.name?.type == 'pattern' && <Text style={{color:'red'}}>Only letters and numbers name.</Text>}
+              {errors.nameUser?.type == 'required' && <Text style={{color:'red'}}>Name is required.</Text>}
+              {errors.nameUser?.type == 'maxLength' && <Text style={{color:'red'}}>Name 30 mas characters.</Text>}
+              {errors.nameUser?.type == 'minLength' && <Text style={{color:'red'}}>Name 3 min characters.</Text>}
+              {errors.nameUser?.type == 'pattern' && <Text style={{color:'red'}}>Only letters and numbers name.</Text>}
+          <Controller 
+              control={control}
+              rules={{
+                  required: true,
+                  maxLength:30,
+                  minLength:10,
+                  pattern:/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={{margin:20, borderRadius:10}}
+                    placeholder="Write your user full name"
+                    label="Full name"
+                    mode='outlined'
+                    left={<TextInput.Icon icon="clipboard-account"/>}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                  )}
+                  name="fullName"
+              />
+              {errors.fullName?.type == 'required' && <Text style={{color:'red'}}>Name is required.</Text>}
+              {errors.fullName?.type == 'maxLength' && <Text style={{color:'red'}}>Name 30 max characters.</Text>}
+              {errors.fullName?.type == 'minLength' && <Text style={{color:'red'}}>Name 3 min characters.</Text>}
+              {errors.fullName?.type == 'pattern' && <Text style={{color:'red'}}>Only letters and numbers name.</Text>}
 
           <Controller
                 control={control}
@@ -104,6 +149,24 @@ export const RegisterUser = ({navigation,route}) => {
           <TouchableOpacity onPress={handlePress}>
             <Text>Back</Text>
           </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {setModalVisible(false);}}>
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>{message}</Text>
+                    <TouchableHighlight
+                        style={{ ...styles.closeButton }}
+                        onPress={() => {
+                            closeModal();
+                        }}>
+                        <Text style={styles.textStyle}>Cerrar</Text>
+                    </TouchableHighlight>
+                </View>
+            </View>
+          </Modal>
       </View>
     
   )
@@ -114,7 +177,34 @@ const styles = StyleSheet.create({
       backgroundColor: '#AF7AC5 ',
       alignItems: 'center',
       justifyContent: 'center',
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      closeButton: {
+        marginTop: 20,
+        backgroundColor: "#2196F3",
+        borderRadius: 20,
+        padding: 10
+      }
   });
 
   
